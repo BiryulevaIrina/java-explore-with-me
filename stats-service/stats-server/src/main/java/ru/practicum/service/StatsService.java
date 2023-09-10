@@ -8,11 +8,9 @@ import java.util.List;
 
 public interface StatsService {
 
-    List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique);
-    //List<ViewStatsDto> getStats(String start, String end, List<String> uris, Boolean unique);
-    //EndpointHitDto save(EndpointHitDto hitDto);
+    List<ViewStatsDto> getStatsWithUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
+
+    List<ViewStatsDto> getAllStats(LocalDateTime start, LocalDateTime end, List<String> uris);
 
     void save(EndpointHitDto hitDto);
-
-
 }

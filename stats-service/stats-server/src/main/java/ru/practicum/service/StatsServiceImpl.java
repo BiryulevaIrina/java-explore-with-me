@@ -19,13 +19,15 @@ public class StatsServiceImpl implements StatsService {
     private final StatsRepository statsRepository;
 
     @Override
-    public List<ViewStatsDto> getStats(LocalDateTime start, LocalDateTime end, List<String> uris, Boolean unique) {
-        if (unique) {
-            return statsRepository.findStatsWithUniqueIp(start, end, uris);
-        } else {
-            return statsRepository.findAllStats(start, end, uris);
-        }
+    public List<ViewStatsDto> getStatsWithUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris) {
+        return statsRepository.findStatsWithUniqueIp(start, end, uris);
     }
+
+    @Override
+    public List<ViewStatsDto> getAllStats(LocalDateTime start, LocalDateTime end, List<String> uris) {
+        return statsRepository.findAllStats(start, end, uris);
+    }
+
 
     @Override
     public void save(EndpointHitDto hitDto) {
