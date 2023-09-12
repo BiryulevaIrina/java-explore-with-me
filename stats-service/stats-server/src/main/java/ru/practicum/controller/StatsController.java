@@ -30,11 +30,9 @@ public class StatsController {
         log.debug("Получен GET-запрос на получение статистики за период с {} до {}", start, end);
         if (end.isBefore(start)) throw new BadRequestException("Ошибка при введении начала и окончания периода " +
                 "получения статистических данных.");
-        if (unique) {
-            return statsService.getStatsWithUniqueIp(start, end, uris);
-        } else {
-            return statsService.getAllStats(start, end, uris);
-        }
+        return unique
+                ? statsService.getStatsWithUniqueIp(start, end, uris)
+                : statsService.getAllStats(start, end, uris);
     }
 
     @PostMapping("/hit")
