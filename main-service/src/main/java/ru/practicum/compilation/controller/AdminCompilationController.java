@@ -7,6 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.UpdateCompilationDto;
 import ru.practicum.compilation.service.CompilationService;
 
 import javax.validation.Valid;
@@ -38,7 +39,7 @@ public class AdminCompilationController {
     @PatchMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto updateCompilation(@Min(1) @PathVariable Long compId,
-                                            @Valid @RequestBody(required = false) NewCompilationDto compilationDto) {
+                                            @Valid @RequestBody(required = false) UpdateCompilationDto compilationDto) {
         log.info("Получен PATCH-запрос на изменение подборки c id={}", compId);
         return compilationService.update(compId, compilationDto);
     }

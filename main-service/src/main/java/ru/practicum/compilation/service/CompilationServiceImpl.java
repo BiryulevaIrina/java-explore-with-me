@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import ru.practicum.compilation.dto.CompilationDto;
 import ru.practicum.compilation.dto.NewCompilationDto;
+import ru.practicum.compilation.dto.UpdateCompilationDto;
 import ru.practicum.compilation.mapper.CompilationMapper;
 import ru.practicum.compilation.model.Compilation;
 import ru.practicum.compilation.repository.CompilationRepository;
@@ -68,7 +69,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public CompilationDto update(Long compId, NewCompilationDto compilationDto) {
+    public CompilationDto update(Long compId, UpdateCompilationDto compilationDto) {
         Compilation compilation = compilationRepository.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Подборки с идентификатором " + compId
                         + " нет в базе."));
