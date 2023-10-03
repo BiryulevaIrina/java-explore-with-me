@@ -4,10 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.dto.EndpointHitDto;
-import ru.practicum.dto.ViewStatsDto;
+import ru.practicum.EndpointHitDto;
+import ru.practicum.ViewStatsDto;
 import ru.practicum.exception.BadRequestException;
 import ru.practicum.service.StatsService;
 
@@ -22,6 +21,7 @@ public class StatsController {
     private final StatsService statsService;
 
     @GetMapping("/stats")
+    @ResponseStatus(HttpStatus.OK)
     public List<ViewStatsDto> getStats(@RequestParam
                                        @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
                                        @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
@@ -31,14 +31,14 @@ public class StatsController {
         if (end.isBefore(start)) throw new BadRequestException("Ошибка при введении начала и окончания периода " +
                 "получения статистических данных.");
         return unique
-                ? statsService.getStatsWithUniqueIp(start, end, uris)
-                : statsService.getAllStats(start, end, uris);
+                ? statsService.getAllWithUniqueIp(start, end, uris)
+                : statsService.getAll(start, end, uris);
     }
 
     @PostMapping("/hit")
-    public ResponseEntity<String> createEndpointHit(@RequestBody EndpointHitDto hitDto) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createEndpointHit(@RequestBody EndpointHitDto hitDto) {
         statsService.save(hitDto);
         log.debug("Получен POST-запрос на сохранение информации, что был запрос к эндпоинту: {}", hitDto.getUri());
-        return new ResponseEntity<>("Сохранена информация", HttpStatus.CREATED);
     }
 }

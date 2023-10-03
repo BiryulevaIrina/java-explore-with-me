@@ -1,15 +1,13 @@
 package ru.practicum.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -24,6 +22,7 @@ public class EndpointHit {
     private String uri;
     @Column(nullable = false)
     private String ip;
-    @Column(nullable = false)
+    @Column(name = "time_stamp", nullable = false)
     private LocalDateTime timestamp;
+
 }
