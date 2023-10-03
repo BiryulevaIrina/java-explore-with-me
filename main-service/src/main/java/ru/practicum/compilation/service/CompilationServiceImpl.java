@@ -15,7 +15,6 @@ import ru.practicum.event.model.Event;
 import ru.practicum.event.repository.EventRepository;
 import ru.practicum.exception.NotFoundException;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -29,7 +28,7 @@ public class CompilationServiceImpl implements CompilationService {
     private final EventRepository eventRepository;
 
     @Override
-    public List<CompilationDto> getAllCompilations(int from, int size) {
+    public List<CompilationDto> getAll(int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         return compilationRepository.findAll(pageable).stream()
                 .map(CompilationMapper::mapToCompilationDto)
@@ -37,7 +36,7 @@ public class CompilationServiceImpl implements CompilationService {
     }
 
     @Override
-    public List<CompilationDto> getCompilationsByPinned(int from, int size) {
+    public List<CompilationDto> getAllByPinned(int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         return compilationRepository.findByPinned(pageable).stream()
                 .map(CompilationMapper::mapToCompilationDto)
@@ -46,22 +45,14 @@ public class CompilationServiceImpl implements CompilationService {
 
     @Override
     public CompilationDto create(NewCompilationDto newCompilationDto) {
-        List<Event> allEvents = new ArrayList<>();
-        if (newCompilationDto.getEvents() != null && !newCompilationDto.getEvents().isEmpty()) {
-            allEvents = eventRepository.findAllById(newCompilationDto.getEvents());
-        }
-        Set<Event> events = new HashSet<>(allEvents);
+        List<Event> events = eventRepository.findAllById(newCompilationDto.getEvents());
         Compilation compilation = CompilationMapper.mapToCompilation(newCompilationDto);
-        compilation.setEvents(events);
-        if (newCompilationDto.getPinned() == null) {
-            compilation.setPinned(false);
-        }
+        compilation.setEvents(new HashSet<>(events));
         return CompilationMapper.mapToCompilationDto(compilationRepository.save(compilation));
     }
 
-
     @Override
-    public CompilationDto getCompilationById(Long compId) {
+    public CompilationDto getById(Long compId) {
         return compilationRepository.findById(compId)
                 .map(CompilationMapper::mapToCompilationDto)
                 .orElseThrow(() -> new NotFoundException("Подборка с id = " + compId

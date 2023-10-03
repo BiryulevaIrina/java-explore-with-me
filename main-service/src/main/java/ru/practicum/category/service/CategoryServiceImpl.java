@@ -23,7 +23,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final EventRepository eventRepository;
 
     @Override
-    public List<CategoryDto> getCategories(int from, int size) {
+    public List<CategoryDto> getAll(int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         return categoryRepository.findAll(pageable).stream()
                 .map(CategoryMapper::toCategoryDto)
@@ -39,7 +39,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryDto getCategoryById(Long id) {
+    public CategoryDto getById(Long id) {
         return categoryRepository.findById(id)
                 .map(CategoryMapper::toCategoryDto)
                 .orElseThrow(() -> new NotFoundException("Категории с идентификатором " + id
@@ -48,7 +48,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto update(Long id, NewCategoryDto newCategoryDto) {
-        Category category = getById(id);
+        Category category = getCategory(id);
         if (category.getName().equals(newCategoryDto.getName())) {
             return CategoryMapper.toCategoryDto(category);
         }
@@ -59,7 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void delete(Long catId) {
-        Category category = getById(catId);
+        Category category = getCategory(catId);
         if (eventRepository.existsByCategoryId(category.getId())) {
             throw new ConflictException("Категория с id = " + category.getId()
                     + " не может быть удалена из-за привязанных событий");
@@ -73,7 +73,7 @@ public class CategoryServiceImpl implements CategoryService {
         }
     }
 
-    private Category getById(Long catId) {
+    private Category getCategory(Long catId) {
         return categoryRepository.findById(catId)
                 .orElseThrow(() -> new NotFoundException("Категории с идентификатором " + catId
                         + " нет в базе."));

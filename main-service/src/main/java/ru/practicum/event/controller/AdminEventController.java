@@ -49,7 +49,7 @@ public class AdminEventController {
                 .from(from)
                 .size(size)
                 .build();
-        return eventService.getEventsByAdmin(params);
+        return eventService.getAllByAdmin(params);
     }
 
     @PatchMapping("/{eventId}")
@@ -57,7 +57,7 @@ public class AdminEventController {
     public EventFullDto updateEvent(@Min(1) @PathVariable Long eventId,
                                     @Valid @RequestBody UpdateEventAdminRequest updateEvent) {
         log.info("Получен запрос PATCH /admin/events/{} на изменение события.", eventId);
-        return eventService.updateEventByAdmin(eventId, updateEvent);
+        return eventService.updateByAdmin(eventId, updateEvent);
     }
 
 }

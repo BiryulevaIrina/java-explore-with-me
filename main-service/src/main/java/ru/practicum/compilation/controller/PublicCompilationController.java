@@ -34,14 +34,14 @@ public class PublicCompilationController {
             pinned = false;
         }
         return pinned
-                ? compilationService.getCompilationsByPinned(from, size)
-                : compilationService.getAllCompilations(from, size);
+                ? compilationService.getAllByPinned(from, size)
+                : compilationService.getAll(from, size);
     }
 
     @GetMapping("/{compId}")
     @ResponseStatus(HttpStatus.OK)
     public CompilationDto getCompilationById(@Min(1) @PathVariable Long compId) {
         log.info("Получен GET-запрос на получение подборки с ID={}", compId);
-        return compilationService.getCompilationById(compId);
+        return compilationService.getById(compId);
     }
 }

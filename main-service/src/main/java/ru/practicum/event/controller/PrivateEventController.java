@@ -33,7 +33,7 @@ public class PrivateEventController {
                                          @RequestParam(defaultValue = "10") int size) {
         log.info("Получен запрос GET-запрос по пользователю с id = {} c параметрами: from = {}, size = {}",
                 userId, from, size);
-        return eventService.getAllEventsByUserId(userId, from, size);
+        return eventService.getAllByUserId(userId, from, size);
     }
 
     @PostMapping
@@ -50,7 +50,7 @@ public class PrivateEventController {
                                  @Min(1) @PathVariable Long eventId) {
         log.info("Получен GET-запрос на получение полной информации о событии с id = {}, " +
                 "добавленном пользователем с id = {}", eventId, userId);
-        return eventService.getEvent(userId, eventId);
+        return eventService.getByIdAndUserId(userId, eventId);
     }
 
 
@@ -60,7 +60,7 @@ public class PrivateEventController {
                                     @Valid @RequestBody UpdateEventUserRequest request) {
         log.info("Получен PATCH-запрос на изменение события с id = {}, " +
                 "добавленного пользователем с id = {}", eventId, userId);
-        return eventService.updateEventByUser(userId, eventId, request);
+        return eventService.update(userId, eventId, request);
     }
 
     @GetMapping("/{eventId}/requests")
@@ -69,7 +69,7 @@ public class PrivateEventController {
                                                               @Min(1) @PathVariable Long eventId) {
         log.info("Получен GET-запрос на получение информации о запросах на участие в событии с id = {} " +
                 "пользователя с id = {}", eventId, userId);
-        return eventService.getEventParticipants(userId, eventId);
+        return eventService.getAllByIdAndUserId(userId, eventId);
     }
 
     @PatchMapping("/{eventId}/requests")

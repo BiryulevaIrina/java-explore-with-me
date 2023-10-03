@@ -53,13 +53,13 @@ public class PublicEventController {
                 .size(size)
                 .request(request)
                 .build();
-        return eventService.getEventsWithFilters(params);
+        return eventService.getAllWithFilters(params);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public EventFullDto getEvent(@PathVariable Long id, HttpServletRequest request) {
-        return eventService.getFullEventById(id, request);
+        return eventService.getByIdWithRequest(id, request);
     }
 
 }

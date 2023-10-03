@@ -12,6 +12,7 @@ import ru.practicum.compilation.service.CompilationService;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import java.util.HashSet;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +27,9 @@ public class AdminCompilationController {
     @ResponseStatus(HttpStatus.CREATED)
     public CompilationDto createNewCompilation(@Valid @RequestBody NewCompilationDto newCompilationDto) {
         log.info("Получен POST-запрос на добавление админом новой подборки");
+        if (newCompilationDto.getEvents() == null) {
+            newCompilationDto.setEvents(new HashSet<>());
+        }
         return compilationService.create(newCompilationDto);
     }
 

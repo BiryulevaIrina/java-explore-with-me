@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public List<UserDto> getUsers(List<Long> ids, int from, int size) {
+    public List<UserDto> getAll(List<Long> ids, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         if (ids == null || ids.isEmpty()) {
             return userRepository.findAll(pageable).stream()
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User getUserById(Long id) {
+    public User getById(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Пользователя с идентификатором " + id
                         + " нет в базе."));
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void delete(Long userId) {
-        getUserById(userId);
+        getById(userId);
         userRepository.deleteById(userId);
     }
 

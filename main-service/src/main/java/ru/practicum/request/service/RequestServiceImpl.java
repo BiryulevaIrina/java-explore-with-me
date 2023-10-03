@@ -27,8 +27,8 @@ public class RequestServiceImpl implements RequestService {
     private final EventService eventService;
 
     @Override
-    public List<ParticipationRequestDto> getRequests(Long userId) {
-        userService.getUserById(userId);
+    public List<ParticipationRequestDto> getAll(Long userId) {
+        userService.getById(userId);
         return requestRepository.findAllByRequesterId(userId)
                 .stream()
                 .map(RequestMapper::toParticipationRequestDto)
@@ -37,7 +37,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto create(Long userId, Long eventId) {
-        User user = userService.getUserById(userId);
+        User user = userService.getById(userId);
         Event event = eventService.getEvent(eventId);
 
         if (requestRepository.findByRequesterIdAndEventId(userId, eventId).isPresent()) {
@@ -71,7 +71,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public ParticipationRequestDto update(Long userId, Long requestId) {
-        userService.getUserById(userId);
+        userService.getById(userId);
         Request request = requestRepository.findById(requestId)
                 .orElseThrow(() -> new NotFoundException("Запрос с id = " + requestId + " не найден."));
         request.setStatus(RequestStatus.CANCELED);

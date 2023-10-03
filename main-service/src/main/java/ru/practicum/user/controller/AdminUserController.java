@@ -28,7 +28,7 @@ public class AdminUserController {
                                   @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") int from,
                                   @Positive @RequestParam(name = "size", defaultValue = "10") int size) {
         log.info("Получен GET-запрос на получение списка пользователей при ids {}, from = {}, size = {}", ids, from, size);
-        return userService.getUsers(ids, from, size);
+        return userService.getAll(ids, from, size);
     }
 
     @PostMapping("/users")

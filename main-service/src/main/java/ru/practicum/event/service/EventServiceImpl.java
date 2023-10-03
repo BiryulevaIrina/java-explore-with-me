@@ -52,8 +52,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getAllEventsByUserId(Long userId, int from, int size) {
-        userService.getUserById(userId);
+    public List<EventShortDto> getAllByUserId(Long userId, int from, int size) {
+        userService.getById(userId);
         Pageable pageable = PageRequest.of(from / size, size);
         return eventRepository.findAllByInitiatorId(userId, pageable)
                 .stream()
@@ -76,7 +76,7 @@ public class EventServiceImpl implements EventService {
             event.setRequestModeration(true);
         }
         event.setState(State.PENDING);
-        event.setInitiator(userService.getUserById(userId));
+        event.setInitiator(userService.getById(userId));
         event.setCategory(categoryRepository.findById(newEventDto.getCategoryId())
                 .orElseThrow(() -> new NotFoundException("Категории с идентификатором " + newEventDto.getCategoryId()
                         + " нет в базе.")));
@@ -88,8 +88,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getEvent(Long userId, Long eventId) {
-        User user = userService.getUserById(userId);
+    public EventFullDto getByIdAndUserId(Long userId, Long eventId) {
+        User user = userService.getById(userId);
         Event event = getEventByIdByUserId(user.getId(), eventId);
         if (!(event.getInitiator().getId()).equals(userId)) {
             throw new ConflictException("Пользователь с id = " + userId +
@@ -99,8 +99,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto updateEventByUser(Long userId, Long eventId, UpdateEventUserRequest userRequest) {
-        User user = userService.getUserById(userId);
+    public EventFullDto update(Long userId, Long eventId, UpdateEventUserRequest userRequest) {
+        User user = userService.getById(userId);
         Event event = getEventByIdByUserId(user.getId(), eventId);
 
         if (event.getState().equals(State.PUBLISHED)) {
@@ -162,8 +162,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<ParticipationRequestDto> getEventParticipants(Long userId, Long eventId) {
-        userService.getUserById(userId);
+    public List<ParticipationRequestDto> getAllByIdAndUserId(Long userId, Long eventId) {
+        userService.getById(userId);
         getEvent(eventId);
         return requestRepository.findAllByEventId(eventId)
                 .stream()
@@ -174,7 +174,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public EventRequestStatusUpdateResult changeRequestStatus(Long userId, Long eventId,
                                                               EventRequestStatusUpdateRequest updateRequest) {
-        userService.getUserById(userId);
+        userService.getById(userId);
         Event event = getEvent(eventId);
 
         if (!event.getRequestModeration() || event.getParticipantLimit() == 0) {
@@ -214,7 +214,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventFullDto> getEventsByAdmin(EventRequestParams params) {
+    public List<EventFullDto> getAllByAdmin(EventRequestParams params) {
         if (params.getRangeStart() == null) {
             params.setRangeStart(LocalDateTime.now());
         }
@@ -235,7 +235,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto updateEventByAdmin(Long eventId, UpdateEventAdminRequest adminRequest) {
+    public EventFullDto updateByAdmin(Long eventId, UpdateEventAdminRequest adminRequest) {
         Event event = getEvent(eventId);
 
         if (adminRequest.getAnnotation() != null && !adminRequest.getAnnotation().isBlank()) {
@@ -293,7 +293,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventShortDto> getEventsWithFilters(EventRequestParams params) {
+    public List<EventShortDto> getAllWithFilters(EventRequestParams params) {
 
         if (params.getRangeStart() == null) {
             params.setRangeStart(LocalDateTime.now());
@@ -332,7 +332,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventFullDto getFullEventById(Long eventId, HttpServletRequest request) {
+    public EventFullDto getByIdWithRequest(Long eventId, HttpServletRequest request) {
         Event event = getEvent(eventId);
         if (!event.getState().equals(State.PUBLISHED)) {
             throw new NotFoundException("Событие с id = " + eventId + " не опубликовано");
