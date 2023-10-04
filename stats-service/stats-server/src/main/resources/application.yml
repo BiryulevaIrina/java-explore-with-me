@@ -36,7 +36,7 @@ spring:
 spring:
   config:
     activate:
-      on-profile: ci,test,default
+      on-profile: ci,test
   datasource:
     driverClassName: org.h2.Driver
     password: test
