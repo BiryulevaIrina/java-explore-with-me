@@ -70,11 +70,11 @@
 					"variable": [
 						{
 							"key": "userId",
-							"value": "1"
+							"value": "2"
 						},
 						{
 							"key": "eventId",
-							"value": "3"
+							"value": "1"
 						}
 					]
 				}
@@ -299,7 +299,7 @@
 						},
 						{
 							"key": "commentId",
-							"value": "1"
+							"value": "3"
 						}
 					]
 				}
@@ -411,7 +411,7 @@
 						},
 						{
 							"key": "commentId",
-							"value": "3"
+							"value": "2"
 						}
 					]
 				}
@@ -557,7 +557,7 @@
 					"variable": [
 						{
 							"key": "commentId",
-							"value": "1"
+							"value": "2"
 						}
 					]
 				}
