@@ -68,7 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     private void getByName(Category category) {
-        if (categoryRepository.findByName(category.getName()) != null) {
+        if (categoryRepository.existsByName(category.getName())) {
             throw new ConflictException("Имя категории " + category.getName() + " уже существует.");
         }
     }
